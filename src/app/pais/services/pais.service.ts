@@ -13,4 +13,14 @@ export class PaisService {
     const url = `${this.apiUlr}/name/${termino}`;
     return this.http.get<Country[]>(url);
   }
+
+  buscarCapital(termino:string):Observable <Country[]>{
+    const url = `${this.apiUlr}/capital/${termino}`;
+    return this.http.get<Country[]>(url);
+  }
+
+  getPaisPorAlpha(id:string):Observable <Country>{
+    const url = `${this.apiUlr}/alpha/${id}`;
+    return this.http.get<Country>(url);
+  }
 }
