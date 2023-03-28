@@ -5,16 +5,26 @@ import { Country } from '../../interfaces/pais.interface';
 @Component({
   selector: 'app-por-pais',
   templateUrl: './por-pais.component.html',
-  styleUrls: ['./por-pais.component.css'],
+  styles: [
+    `
+    li{
+      cursor:pointer;
+    }
+  `
+  ],
 })
 export class PorPaisComponent {
-  termino : string  = '';
+  termino: string = '';
   hayError: boolean = false;
-  paises  : Country[] = [];
+  paises: Country[] = [];
+  paisesSugeridos: Country[] = [];
+  mostrasugerencias:boolean = false;
+
+
   constructor(private paisService: PaisService) {}
-  buscar(termino:string) {
-    this.hayError = false
-    this.termino = termino
+  buscar(termino: string) {
+    this.hayError = false;
+    this.termino = termino;
     console.log(this.termino);
     this.paisService.buscarPais(termino).subscribe(
       (paises) => {
@@ -23,12 +33,21 @@ export class PorPaisComponent {
       },
       (erro) => {
         this.hayError = true;
-        this.paises   = [];
+        this.paises = [];
       }
     );
   }
 
-  sugerencias(termino:string){
-this.hayError=false;
+  sugerencias(termino: string) {
+    this.hayError = false;
+    this.termino = termino;
+    this.mostrasugerencias = true;
+    this.paisService.buscarPais(termino)
+        .subscribe(paises=> this.paisesSugeridos = paises.splice(0,5),
+        (err)=> this.paisesSugeridos = [])
+  }
+
+  buscarsugerido(termino:string){
+    this.buscar(termino);
   }
 }
